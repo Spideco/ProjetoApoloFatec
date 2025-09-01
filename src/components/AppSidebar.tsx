@@ -57,7 +57,7 @@ export function AppSidebar() {
   };
   const chatGroups = formatChatsByDate();
   return <Sidebar className="w-80 border-r border-border bg-background" collapsible="icon">
-      <SidebarContent className="p-0 bg-blue-500">
+      <SidebarContent className="p-0 bg-slate-950">
         {/* Header with collapse toggle */}
         <div className="flex items-center justify-between p-3 border-b border-border">
           <div className="flex items-center gap-2">
@@ -77,14 +77,14 @@ export function AppSidebar() {
           </div>}
 
         {/* Collapsed new chat button */}
-        {state === "collapsed" && <div className="p-2 bg-blue-500">
+        {state === "collapsed" && <div className="p-2 bg-slate-950">
             <Button onClick={handleNewChat} variant="ghost" size="icon" className="w-full h-10 hover:bg-accent">
               <MessageSquarePlus className="h-5 w-5" />
             </Button>
           </div>}
 
         {/* Chat History */}
-        <div className="flex-1 overflow-y-auto bg-blue-500">
+        <div className="flex-1 overflow-y-auto bg-slate-950">
           {state !== "collapsed" ?
         // Full sidebar view
         chatGroups.map(group => <SidebarGroup key={group.date} className="px-3 py-2">
