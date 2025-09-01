@@ -37,15 +37,7 @@ export default function Index() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Auto-scroll when AI completes response
-  useEffect(() => {
-    if (messages.length > 0 && !isTyping) {
-      const lastMessage = messages[messages.length - 1];
-      if (!lastMessage.isUser) {
-        scrollToBottom();
-      }
-    }
-  }, [messages, isTyping]);
+  // Auto-scroll disabled
 
   // Load selected chat messages
   useEffect(() => {
