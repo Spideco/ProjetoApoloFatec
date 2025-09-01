@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Gemini-inspired color palette */
+    --background: 0 0% 98%;
+    --foreground: 216 15% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 216 15% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 216 15% 15%;
+
+    /* Soft blue primary inspired by Gemini */
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 210 100% 95%;
+    --primary-subtle: 210 100% 97%;
+
+    /* User message background */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 216 15% 25%;
+
+    /* AI message background with blue accent */
+    --ai-message: 0 0% 100%;
+    --ai-accent: 210 100% 60%;
+    --ai-border: 210 50% 90%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 216 15% 45%;
+
+    --accent: 210 100% 97%;
+    --accent-foreground: 216 15% 25%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 94%;
+    --ring: 210 100% 60%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 217.2 32.6% 17.5%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 217.2 32.6% 17.5%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 210 100% 15%;
+    --primary-subtle: 210 100% 8%;
+
+    /* User message background in dark mode */
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    /* AI message background in dark mode */
+    --ai-message: 217.2 32.6% 15%;
+    --ai-accent: 210 100% 60%;
+    --ai-border: 210 50% 30%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 210 100% 60%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+}
+
+@layer components {
+  /* Gemini-style animations */
+  .message-fade-in {
+    animation: messageSlideIn 0.3s ease-out;
+  }
+  
+  .typing-indicator {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  
+  .chat-container {
+    background: linear-gradient(to bottom, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--background)) 100%);
+  }
+  
+  .user-message {
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+  }
+  
+  .ai-message {
+    background: hsl(var(--ai-message));
+    color: hsl(var(--foreground));
+    border-left: 3px solid hsl(var(--ai-accent));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .chat-input {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+  .send-button {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    transition: all 0.2s ease;
+  }
+  
+  .send-button:hover {
+    background: hsl(var(--primary) / 0.9);
+    transform: scale(1.02);
+  }
+  
+  .send-button:disabled {
+    background: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+    transform: none;
+  }
+  
+  .new-chat-button {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+  
+  .new-chat-button:hover {
+    background: hsl(var(--primary-light));
+    border-color: hsl(var(--primary));
+    transform: translateY(-1px);
+  }
+  
+  .copy-button {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .message-container:hover .copy-button {
+    opacity: 1;
+  }
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
