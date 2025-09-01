@@ -56,9 +56,8 @@ export function AppSidebar() {
     return Object.values(groups).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   };
   const chatGroups = formatChatsByDate();
-  return (
-    <Sidebar className="w-80 border-r border-border bg-background" collapsible="icon">
-      <SidebarContent className="p-0">
+  return <Sidebar className="w-80 border-r border-border bg-background" collapsible="icon">
+      <SidebarContent className="p-0 bg-slate-950">
         {/* Header with collapse toggle */}
         <div className="flex items-center justify-between p-3 border-b border-border">
           <div className="flex items-center gap-2">
@@ -70,38 +69,25 @@ export function AppSidebar() {
         </div>
 
         {/* New Chat Button - only show when not collapsed */}
-        {state !== "collapsed" && (
-          <div className="p-3 border-b border-border">
-            <Button 
-              onClick={handleNewChat} 
-              className="w-full justify-start gap-3 bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
+        {state !== "collapsed" && <div className="p-3 border-b border-border">
+            <Button onClick={handleNewChat} className="w-full justify-start gap-3 bg-primary hover:bg-primary/90 text-primary-foreground">
               <MessageSquarePlus className="h-4 w-4" />
               <span>Novo Chat</span>
             </Button>
-          </div>
-        )}
+          </div>}
 
         {/* Collapsed new chat button */}
-        {state === "collapsed" && (
-          <div className="p-2">
-            <Button 
-              onClick={handleNewChat} 
-              variant="ghost" 
-              size="icon" 
-              className="w-full h-10 hover:bg-accent"
-            >
+        {state === "collapsed" && <div className="p-2">
+            <Button onClick={handleNewChat} variant="ghost" size="icon" className="w-full h-10 hover:bg-accent">
               <MessageSquarePlus className="h-5 w-5" />
             </Button>
-          </div>
-        )}
+          </div>}
 
         {/* Chat History */}
         <div className="flex-1 overflow-y-auto">
-          {state !== "collapsed" ? (
-            // Full sidebar view
-            chatGroups.map((group) => (
-              <SidebarGroup key={group.date} className="px-3 py-2">
+          {state !== "collapsed" ?
+        // Full sidebar view
+        chatGroups.map(group => <SidebarGroup key={group.date} className="px-3 py-2">
                 <SidebarGroupLabel className="text-xs text-muted-foreground px-0 pb-2">
                   <Calendar className="h-3 w-3 mr-1" />
                   {group.date}
@@ -109,18 +95,11 @@ export function AppSidebar() {
                 
                 <SidebarGroupContent>
                   <SidebarMenu>
-                    {group.chats.map((chat) => (
-                      <SidebarMenuItem key={chat.id}>
-                        <SidebarMenuButton 
-                          onClick={() => handleChatSelect(chat.id)} 
-                          className={`
+                    {group.chats.map(chat => <SidebarMenuItem key={chat.id}>
+                        <SidebarMenuButton onClick={() => handleChatSelect(chat.id)} className={`
                             relative group rounded-lg px-3 py-2 text-left w-full justify-start
-                            ${currentChatId === chat.id 
-                              ? 'bg-accent text-accent-foreground' 
-                              : 'hover:bg-accent/50 text-muted-foreground hover:text-foreground'
-                            }
-                          `}
-                        >
+                            ${currentChatId === chat.id ? 'bg-accent text-accent-foreground' : 'hover:bg-accent/50 text-muted-foreground hover:text-foreground'}
+                          `}>
                           <MessageSquare className="h-4 w-4 mr-3 flex-shrink-0" />
                           <div className="flex-1 min-w-0">
                             <div className="truncate text-sm font-medium">
@@ -133,54 +112,29 @@ export function AppSidebar() {
                           
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity" 
-                                onClick={(e) => e.stopPropagation()}
-                              >
+                              <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity" onClick={e => e.stopPropagation()}>
                                 <MoreHorizontal className="h-3 w-3" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-48">
-                              <DropdownMenuItem 
-                                onClick={(e) => handleDeleteChat(chat.id, e)} 
-                                className="text-destructive focus:text-destructive"
-                              >
+                              <DropdownMenuItem onClick={e => handleDeleteChat(chat.id, e)} className="text-destructive focus:text-destructive">
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Excluir chat
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
+                      </SidebarMenuItem>)}
                   </SidebarMenu>
                 </SidebarGroupContent>
-              </SidebarGroup>
-            ))
-          ) : (
-            // Collapsed sidebar view - just show chat icons
-            <div className="p-2 space-y-2">
-              {chatHistory.slice(0, 10).map((chat) => (
-                <Button 
-                  key={chat.id} 
-                  onClick={() => handleChatSelect(chat.id)} 
-                  variant="ghost" 
-                  size="icon" 
-                  className={`w-full h-10 ${
-                    currentChatId === chat.id 
-                      ? 'bg-accent text-accent-foreground' 
-                      : 'hover:bg-accent/50'
-                  }`}
-                >
+              </SidebarGroup>) :
+        // Collapsed sidebar view - just show chat icons
+        <div className="p-2 space-y-2">
+              {chatHistory.slice(0, 10).map(chat => <Button key={chat.id} onClick={() => handleChatSelect(chat.id)} variant="ghost" size="icon" className={`w-full h-10 ${currentChatId === chat.id ? 'bg-accent text-accent-foreground' : 'hover:bg-accent/50'}`}>
                   <MessageSquare className="h-4 w-4" />
-                </Button>
-              ))}
-            </div>
-          )}
+                </Button>)}
+            </div>}
         </div>
       </SidebarContent>
-    </Sidebar>
-  );
+    </Sidebar>;
 }
