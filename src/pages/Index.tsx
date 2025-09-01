@@ -6,6 +6,7 @@ import { TypingIndicator } from '@/components/TypingIndicator';
 import { NewChatButton } from '@/components/NewChatButton';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { AppSidebar } from '@/components/AppSidebar';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
 import { useChatHistory } from '@/hooks/useChatHistory';
@@ -126,7 +127,9 @@ export default function Index() {
           <div className="flex-1 flex justify-center">
             <ChatHeader />
           </div>
-          <div className="w-8"></div> {/* Spacer for centering */}
+          <div className="hidden md:block">
+            <ThemeToggle />
+          </div>
         </header>
 
         <main className="flex-1 flex flex-col">
