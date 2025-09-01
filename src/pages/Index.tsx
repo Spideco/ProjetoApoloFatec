@@ -3,7 +3,6 @@ import { ChatHeader } from '@/components/ChatHeader';
 import { ChatMessage } from '@/components/ChatMessage';
 import { ChatInput } from '@/components/ChatInput';
 import { TypingIndicator } from '@/components/TypingIndicator';
-import { NewChatButton } from '@/components/NewChatButton';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { AppSidebar } from '@/components/AppSidebar';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -156,11 +155,9 @@ export default function Index() {
         <ChatInput 
           onSendMessage={handleSendMessage} 
           disabled={isTyping}
+          onNewChat={handleNewChat}
+          showNewChatButton={messages.length > 0}
         />
-        
-        {messages.length > 0 && (
-          <NewChatButton onClick={handleNewChat} />
-        )}
       </div>
     </div>
   );

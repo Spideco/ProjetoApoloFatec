@@ -1,14 +1,16 @@
 import { useState, KeyboardEvent } from 'react';
-import { Send } from 'lucide-react';
+import { Send, Plus } from 'lucide-react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   disabled?: boolean;
+  onNewChat?: () => void;
+  showNewChatButton?: boolean;
 }
 
-export const ChatInput = ({ onSendMessage, disabled = false }: ChatInputProps) => {
+export const ChatInput = ({ onSendMessage, disabled = false, onNewChat, showNewChatButton = false }: ChatInputProps) => {
   const [message, setMessage] = useState('');
 
   const handleSend = () => {
@@ -28,6 +30,15 @@ export const ChatInput = ({ onSendMessage, disabled = false }: ChatInputProps) =
   return (
     <div className="chat-input fixed bottom-0 left-0 right-0 p-4 border-t border-border backdrop-blur-sm bg-background/80">
       <div className="max-w-4xl mx-auto flex gap-3 items-end">
+        {showNewChatButton && (
+          <Button
+            onClick={onNewChat}
+            className="h-[52px] w-[52px] p-0 flex-shrink-0 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
+            size="icon"
+          >
+            <Plus className="h-5 w-5" />
+          </Button>
+        )}
         <div className="flex-1 relative">
           <Textarea
             value={message}
