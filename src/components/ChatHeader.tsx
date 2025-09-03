@@ -1,5 +1,5 @@
 import { GraduationCap } from 'lucide-react';
-import { ThemeToggle } from './ThemeToggle';
+
 export const ChatHeader = () => {
   return <div className="flex items-center justify-center gap-3 py-2">
       <div className="flex flex-col items-center">
@@ -10,9 +10,6 @@ export const ChatHeader = () => {
           <h1 className="text-lg font-semibold text-foreground tracking-tight">Apolo</h1>
         </div>
         
-      </div>
-      <div className="ml-4 md:hidden">
-        <ThemeToggle />
       </div>
     </div>;
 };

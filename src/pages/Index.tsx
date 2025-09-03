@@ -127,7 +127,7 @@ export default function Index() {
           <div className="flex-1 flex justify-center">
             <ChatHeader />
           </div>
-          <div className="hidden md:block">
+          <div>
             <ThemeToggle />
           </div>
         </header>
