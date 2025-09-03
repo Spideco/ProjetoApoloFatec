@@ -6,7 +6,7 @@ import { TypingIndicator } from '@/components/TypingIndicator';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { AppSidebar } from '@/components/AppSidebar';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
 import { useChatHistory } from '@/hooks/useChatHistory';
 import { GeminiService } from '@/services/geminiService';
@@ -117,10 +117,11 @@ export default function Index() {
 
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
-      <AppSidebar />
-      
-      <div className="flex flex-col flex-1">
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full bg-background">
+        <AppSidebar />
+        
+        <div className="flex flex-col flex-1">
         <header className="h-12 flex items-center justify-between px-4 border-b border-border bg-background/80 backdrop-blur-sm">
           <SidebarTrigger className="md:hidden" />
           <div className="flex-1 flex justify-center">
@@ -160,5 +161,6 @@ export default function Index() {
         />
       </div>
     </div>
+    </SidebarProvider>
   );
 }
