@@ -5,8 +5,8 @@ export class GeminiService {
   private model: any;
 
   constructor() {
-    this.genAI = new GoogleGenerativeAI('AIzaSyARED1kHOwBJy4xbRMWmOhRuFfSmqucGSU');
-    this.model = this.genAI.getGenerativeModel({ 
+    this.genAI = new GoogleGenerativeAI('AIzaSyDfdwmofon0Gi2t0J2FUrbtXA2tIfF7UR4');
+    this.model = this.genAI.getGenerativeModel({
       model: 'gemini-1.5-flash',
       generationConfig: {
         temperature: 0.7,
