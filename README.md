@@ -78,7 +78,3 @@ Clone este repositório e faça push das mudanças. As alterações serão refle
 ## 📄 Licença
 
 Este projeto foi criado com [Lovable](https://lovable.dev).
-
----
-
-**Desenvolvido com ❤️ para estudantes que buscam excelência no ENEM**
