@@ -1,73 +1,84 @@
-# Apolo Project 
+# 🎓 Apolo - Assistente Educacional para ENEM
 
-## Project info
+Apolo é um assistente educacional inteligente especializado em preparação para o ENEM (Exame Nacional do Ensino Médio). Desenvolvido com tecnologia de IA avançada, o Apolo oferece suporte personalizado em todas as disciplinas do exame, metodologias de estudo eficazes e estratégias de prova.
 
-**URL**: https://lovable.dev/projects/4b8d76c1-503f-49c0-8e27-a1bf4194338a
+## ✨ Funcionalidades
 
-## How can I edit this code?
+- **🤖 Chat Inteligente**: Converse com o Apolo sobre qualquer matéria do ENEM
+- **📚 Todas as Disciplinas**: Matemática, Português, Ciências da Natureza, Ciências Humanas e Redação
+- **💾 Histórico de Conversas**: Salve e retome suas sessões de estudo
+- **🎯 Respostas Contextualizadas**: Memória de conversa para continuidade natural do diálogo
+- **🌓 Modo Claro/Escuro**: Interface adaptável para estudar em qualquer ambiente
+- **📱 Design Responsivo**: Estude em qualquer dispositivo
 
-There are several ways of editing your application.
+## 🛠️ Tecnologias Utilizadas
 
-**Use Lovable**
+- **React 18** - Interface moderna e reativa
+- **TypeScript** - Código tipado e seguro
+- **Vite** - Build rápida e otimizada
+- **Tailwind CSS** - Estilização utilitária
+- **shadcn/ui** - Componentes de interface elegantes
+- **Google Gemini AI** - Inteligência artificial avançada
+- **React Router** - Navegação entre páginas
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4b8d76c1-503f-49c0-8e27-a1bf4194338a) and start prompting.
+## 🚀 Como Executar Localmente
 
-Changes made via Lovable will be committed automatically to this repo.
+### Pré-requisitos
 
-**Use your preferred IDE**
+- Node.js e npm instalados - [instalar com nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Passos
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Clone o repositório
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Navegue até o diretório
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
+# Instale as dependências
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 🌐 Deploy
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Para fazer deploy do seu projeto, acesse [Lovable](https://lovable.dev/projects/4b8d76c1-503f-49c0-8e27-a1bf4194338a) e clique em **Share → Publish**.
 
-**Use GitHub Codespaces**
+## 📝 Como Editar Este Projeto
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### **Opção 1: Usar Lovable (Recomendado)**
 
-## What technologies are used for this project?
+Acesse o [Projeto Lovable](https://lovable.dev/projects/4b8d76c1-503f-49c0-8e27-a1bf4194338a) e comece a fazer prompts. As mudanças serão commitadas automaticamente neste repositório.
 
-This project is built with:
+### **Opção 2: Usar sua IDE favorita**
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Clone este repositório e faça push das mudanças. As alterações serão refletidas no Lovable automaticamente.
 
-## How can I deploy this project?
+### **Opção 3: Editar diretamente no GitHub**
 
-Simply open [Lovable](https://lovable.dev/projects/4b8d76c1-503f-49c0-8e27-a1bf4194338a) and click on Share -> Publish.
+- Navegue até o arquivo desejado
+- Clique no botão "Edit" (ícone de lápis)
+- Faça suas mudanças e commit
 
-## Can I connect a custom domain to my Lovable project?
+### **Opção 4: GitHub Codespaces**
 
-Yes, you can!
+- Clique no botão "Code" (verde)
+- Selecione a aba "Codespaces"
+- Clique em "New codespace"
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🔗 Links Úteis
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- **Projeto no Lovable**: https://lovable.dev/projects/4b8d76c1-503f-49c0-8e27-a1bf4194338a
+- **Documentação do Lovable**: https://docs.lovable.dev/
+- **Configurar Domínio Customizado**: [Guia passo a passo](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## 📄 Licença
+
+Este projeto foi criado com [Lovable](https://lovable.dev).
+
+---
+
+**Desenvolvido com ❤️ para estudantes que buscam excelência no ENEM**
