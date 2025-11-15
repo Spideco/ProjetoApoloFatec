@@ -33,7 +33,7 @@ export const ChatInput = ({ onSendMessage, disabled = false, onNewChat, showNewC
         {showNewChatButton && (
           <Button
             onClick={onNewChat}
-            className="h-[52px] w-[52px] p-0 flex-shrink-0 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
+            className="h-[40px] w-[40px] p-0 flex-shrink-0 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
             size="icon"
           >
             <Plus className="h-5 w-5" />
@@ -45,14 +45,14 @@ export const ChatInput = ({ onSendMessage, disabled = false, onNewChat, showNewC
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Digite sua pergunta em inglês ou português..."
-            className="min-h-[52px] max-h-32 resize-none rounded-2xl border-border focus:ring-primary focus:border-primary pr-12 bg-card pt-4"
+            className="min-h-[40px] max-h-32 resize-none rounded-2xl border-border focus:ring-primary focus:border-primary pr-12 bg-card pt-2"
             disabled={disabled}
           />
         </div>
         <Button
           onClick={handleSend}
           disabled={!message.trim() || disabled}
-          className="send-button rounded-xl h-[52px] w-[52px] p-0 flex-shrink-0"
+          className="send-button rounded-xl h-[40px] w-[40px] p-0 flex-shrink-0"
         >
           <Send className="h-5 w-5" />
         </Button>
