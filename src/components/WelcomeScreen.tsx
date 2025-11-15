@@ -18,7 +18,7 @@ export const WelcomeScreen = () => {
     description: "Respostas detalhadas e didáticas para seu aprendizado"
   }];
   return <div className="flex-1 flex items-center justify-center px-4 py-12">
-      <div className="max-w-2xl mx-auto text-center">
+      <div className="max-w-3xl mx-auto text-center">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-foreground mb-4">Bem-vindo(a) ao Apolo</h2>
           <p className="text-lg text-muted-foreground leading-relaxed">Seu assistente inteligente para estudar e se preparar para o ENEM. Faça perguntas, tire dúvidas e aprenda de forma interativa.</p>
