@@ -45,7 +45,7 @@ export const ChatInput = ({ onSendMessage, disabled = false, onNewChat, showNewC
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Digite sua pergunta em inglês ou português..."
-            className="min-h-[52px] max-h-32 resize-none rounded-2xl border-border focus:ring-primary focus:border-primary pr-12 bg-card pt-4"
+            className="min-h-[52px] max-h-32 resize-none rounded-2xl border-border focus:ring-primary focus:border-primary pr-12 bg-card"
             disabled={disabled}
           />
         </div>
