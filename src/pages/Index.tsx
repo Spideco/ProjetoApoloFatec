@@ -19,10 +19,6 @@ interface Message {
   timestamp: Date;
 }
 
-const HEADER_HEIGHT = 'h-12';
-const HEADER_HEIGHT_PX = 48; // 3rem = 48px
-const SIDEBAR_WIDTH = 'w-80';
-
 export default function Index() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -152,14 +148,10 @@ export default function Index() {
 
   return (
     <div className="flex min-h-screen w-full bg-background">
-      {/* Sidebar - Fixed on desktop, uses Sheet on mobile */}
-      <div className={`hidden md:block md:fixed md:top-0 md:bottom-0 ${SIDEBAR_WIDTH} z-20`}>
-        <AppSidebar />
-      </div>
+      <AppSidebar />
         
-      <div className={`flex flex-col flex-1 md:ml-[${SIDEBAR_WIDTH}]`}>
-        {/* Header Fixo */}
-        <header className={`fixed top-0 left-0 right-0 ${HEADER_HEIGHT} flex items-center justify-between px-4 border-b border-border bg-background/80 backdrop-blur-sm z-30`}>
+        <div className="flex flex-col flex-1">
+        <header className="fixed top-0 left-0 right-0 h-12 flex items-center justify-between px-4 border-b border-border bg-background/80 backdrop-blur-sm z-30">
           <SidebarTrigger className="md:hidden z-40" />
           <div className="flex-1 flex justify-center">
             <ChatHeader />
@@ -169,7 +161,7 @@ export default function Index() {
           </div>
         </header>
 
-        <main className={`flex-1 flex flex-col relative pt-[${HEADER_HEIGHT_PX}px]`}>
+        <main className="flex-1 flex flex-col relative pt-12">
           {messages.length === 0 ? (
             <WelcomeScreen />
           ) : (
