@@ -4,6 +4,8 @@ import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGrou
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { useChatHistory } from '@/hooks/useChatHistory';
+import { useIsMobile } from '@/hooks/use-mobile'; // Importado para verificar o estado mobile
+
 interface ChatGroup {
   date: string;
   chats: {
@@ -26,6 +28,12 @@ export function AppSidebar() {
     state,
     toggleSidebar
   } = useSidebar();
+  
+  const isMobile = useIsMobile();
+  
+  // Força a visualização completa no mobile, ou usa o estado normal no desktop
+  const isFullView = isMobile || state !== "collapsed";
+
   const handleNewChat = () => {
     createNewChat();
   };
@@ -61,23 +69,26 @@ export function AppSidebar() {
         {/* Header with collapse toggle */}
         <div className="flex items-center justify-between p-3 border-b border-sidebar-border">
           <div className="flex items-center gap-2">
-            {state !== "collapsed" && <span className="font-semibold text-sm text-sidebar-foreground">Conversas</span>}
+            {isFullView && <span className="font-semibold text-sm text-sidebar-foreground">Conversas</span>}
           </div>
-          <Button variant="ghost" size="icon" onClick={toggleSidebar} className="h-8 w-8 hover:bg-sidebar-accent text-sidebar-foreground">
-            {state === "collapsed" ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
-          </Button>
+          {/* O botão de toggle de colapso só é relevante no desktop */}
+          {!isMobile && (
+            <Button variant="ghost" size="icon" onClick={toggleSidebar} className="h-8 w-8 hover:bg-sidebar-accent text-sidebar-foreground">
+              {state === "collapsed" ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+            </Button>
+          )}
         </div>
 
-        {/* New Chat Button - only show when not collapsed */}
-        {state !== "collapsed" && <div className="p-3 border-b border-border">
+        {/* New Chat Button - Full View */}
+        {isFullView && <div className="p-3 border-b border-border">
             <Button onClick={handleNewChat} className="w-full justify-start gap-3 bg-primary hover:bg-primary/90 text-primary-foreground">
               <MessageSquarePlus className="h-4 w-4" />
               <span>Novo Chat</span>
             </Button>
           </div>}
 
-        {/* Collapsed new chat button */}
-        {state === "collapsed" && <div className="p-2">
+        {/* Collapsed new chat button (Apenas para desktop colapsado) */}
+        {!isFullView && <div className="p-2">
             <Button onClick={handleNewChat} variant="ghost" size="icon" className="w-full h-10 hover:bg-sidebar-accent text-sidebar-foreground">
               <MessageSquarePlus className="h-5 w-5" />
             </Button>
@@ -85,7 +96,7 @@ export function AppSidebar() {
 
         {/* Chat History */}
         <div className="flex-1 overflow-y-auto">
-          {state !== "collapsed" ?
+          {isFullView ?
         // Full sidebar view
         chatGroups.map(group => <SidebarGroup key={group.date} className="px-3 py-2">
                 <SidebarGroupLabel className="text-xs text-sidebar-foreground/60 px-0 pb-2">
