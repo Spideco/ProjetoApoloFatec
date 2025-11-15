@@ -60,7 +60,7 @@ All colors MUST be HSL.
 
     --sidebar-accent-foreground: 240 5.9% 10%;
 
-    --sidebar-border: 216 33% 17%; /* Nova cor: #1E293B */
+    --sidebar-border: 216 100% 94%; /* Cor #DFEFFF para modo claro */
 
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
@@ -107,7 +107,7 @@ All colors MUST be HSL.
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 216 33% 17%; /* Nova cor: #1E293B */
+    --sidebar-border: 216 33% 17%; /* Cor #1E293B para modo escuro */
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
