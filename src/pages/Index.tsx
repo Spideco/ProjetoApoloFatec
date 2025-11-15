@@ -21,7 +21,6 @@ interface Message {
 export default function Index() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [autoScrollEnabled, setAutoScrollEnabled] = useState(true); // Novo estado para controlar o scroll
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [geminiService] = useState<GeminiService>(new GeminiService());
@@ -37,21 +36,21 @@ export default function Index() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Load selected chat messages & Initial Scroll
+  // Load selected chat messages
   useEffect(() => {
     if (currentChat) {
       setMessages(currentChat.messages);
-      // Scroll para o final ao carregar o histórico de uma conversa existente
-      if (currentChat.messages.length > 0) {
-          setTimeout(scrollToBottom, 50); 
-      }
-      // Reseta o autoScrollEnabled para true ao carregar um novo chat
-      setAutoScrollEnabled(true); 
     } else {
       setMessages([]);
-      setAutoScrollEnabled(true); 
     }
   }, [currentChat]);
+
+  // Auto-scroll when messages change and typing stops
+  useEffect(() => {
+    if (!isTyping) {
+      scrollToBottom();
+    }
+  }, [messages, isTyping]);
 
   // Save messages when they change (debounced)
   useEffect(() => {
@@ -79,7 +78,8 @@ export default function Index() {
     setMessages(prev => [...prev, userMessage]);
     setIsTyping(true);
     
-    // Não fazemos scroll aqui, esperamos a resposta da IA
+    // Scroll down immediately after user sends message
+    setTimeout(scrollToBottom, 100); 
 
     try {
       // Preparar histórico incluindo a mensagem atual
@@ -98,13 +98,6 @@ export default function Index() {
       };
 
       setMessages(prev => [...prev, aiResponse]);
-      
-      // Scroll e desativação: Rola para baixo apenas se o autoScroll estiver ativo
-      if (autoScrollEnabled) {
-          setTimeout(scrollToBottom, 100);
-          setAutoScrollEnabled(false); // Desativa o scroll automático após a primeira resposta
-      }
-
     } catch (error) {
       console.error('Erro ao gerar resposta:', error);
       toast({
@@ -124,7 +117,6 @@ export default function Index() {
     const newChatId = createNewChat();
     setMessages([]);
     setIsTyping(false);
-    setAutoScrollEnabled(true); // Garante que o scroll esteja ativo para o novo chat
     toast({
       title: "Nova conversa iniciada",
       description: "Histórico limpo. Faça sua primeira pergunta!",
