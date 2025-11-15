@@ -36,8 +36,6 @@ export default function Index() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Auto-scroll disabled
-
   // Load selected chat messages
   useEffect(() => {
     if (currentChat) {
@@ -46,6 +44,13 @@ export default function Index() {
       setMessages([]);
     }
   }, [currentChat]);
+
+  // Auto-scroll when messages change and typing stops
+  useEffect(() => {
+    if (!isTyping) {
+      scrollToBottom();
+    }
+  }, [messages, isTyping]);
 
   // Save messages when they change (debounced)
   useEffect(() => {
@@ -72,6 +77,9 @@ export default function Index() {
 
     setMessages(prev => [...prev, userMessage]);
     setIsTyping(true);
+    
+    // Scroll down immediately after user sends message
+    setTimeout(scrollToBottom, 100); 
 
     try {
       // Preparar histórico incluindo a mensagem atual
