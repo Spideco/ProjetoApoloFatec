@@ -10,6 +10,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
 import { useChatHistory } from '@/hooks/useChatHistory';
 import { GeminiService } from '@/services/geminiService';
+import { ScrollToBottomButton } from '@/components/ScrollToBottomButton';
 
 interface Message {
   id: string;
@@ -21,8 +22,12 @@ interface Message {
 export default function Index() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const { toast } = useToast();
+  
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
   const [geminiService] = useState<GeminiService>(new GeminiService());
   const {
     currentChatId,
@@ -36,7 +41,14 @@ export default function Index() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Auto-scroll disabled
+  const handleScroll = () => {
+    const container = chatContainerRef.current;
+    if (container) {
+      // Check if the user is scrolled up more than 200px from the bottom
+      const scrollPosition = container.scrollHeight - container.scrollTop - container.clientHeight;
+      setShowScrollButton(scrollPosition > 200);
+    }
+  };
 
   // Load selected chat messages
   useEffect(() => {
@@ -46,6 +58,24 @@ export default function Index() {
       setMessages([]);
     }
   }, [currentChat]);
+
+  // Auto-scroll on new message or chat load
+  useEffect(() => {
+    // Scroll to bottom when messages are loaded or updated, ensuring the latest content is visible.
+    scrollToBottom();
+  }, [messages.length, isTyping]);
+  
+  // Attach scroll listener
+  useEffect(() => {
+    const container = chatContainerRef.current;
+    if (container) {
+        container.addEventListener('scroll', handleScroll);
+        // Initial check
+        handleScroll();
+        return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, [messages]);
+
 
   // Save messages when they change (debounced)
   useEffect(() => {
@@ -131,11 +161,15 @@ export default function Index() {
           </div>
         </header>
 
-        <main className="flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col relative">
           {messages.length === 0 ? (
             <WelcomeScreen />
           ) : (
-            <div className="flex-1 px-4 py-6 pb-24 overflow-y-auto">
+            <div 
+              ref={chatContainerRef} 
+              className="flex-1 px-4 py-6 pb-24 overflow-y-auto"
+              onScroll={handleScroll}
+            >
               <div className="max-w-4xl mx-auto">
                 {messages.map((message) => (
                   <ChatMessage
@@ -150,6 +184,11 @@ export default function Index() {
               </div>
             </div>
           )}
+          
+          <ScrollToBottomButton 
+            onClick={scrollToBottom} 
+            isVisible={showScrollButton} 
+          />
         </main>
 
         <ChatInput 
