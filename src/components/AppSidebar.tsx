@@ -56,14 +56,14 @@ export function AppSidebar() {
     return Object.values(groups).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   };
   const chatGroups = formatChatsByDate();
-  return <Sidebar className="w-80 border-r border-border bg-background" collapsible="icon">
-      <SidebarContent className="p-0 bg-transparent">
+  return <Sidebar className="w-80 border-r border-sidebar-border" collapsible="icon">
+      <SidebarContent className="p-0">
         {/* Header with collapse toggle */}
-        <div className="flex items-center justify-between p-3 border-b border-border bg-inherit">
+        <div className="flex items-center justify-between p-3 border-b border-sidebar-border">
           <div className="flex items-center gap-2">
-            {state !== "collapsed" && <span className="font-semibold text-sm">Conversas</span>}
+            {state !== "collapsed" && <span className="font-semibold text-sm text-sidebar-foreground">Conversas</span>}
           </div>
-          <Button variant="ghost" size="icon" onClick={toggleSidebar} className="h-8 w-8 hover:bg-accent">
+          <Button variant="ghost" size="icon" onClick={toggleSidebar} className="h-8 w-8 hover:bg-sidebar-accent text-sidebar-foreground">
             {state === "collapsed" ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
           </Button>
         </div>
@@ -77,18 +77,18 @@ export function AppSidebar() {
           </div>}
 
         {/* Collapsed new chat button */}
-        {state === "collapsed" && <div className="p-2 bg-inherit">
-            <Button onClick={handleNewChat} variant="ghost" size="icon" className="w-full h-10 hover:bg-accent">
+        {state === "collapsed" && <div className="p-2">
+            <Button onClick={handleNewChat} variant="ghost" size="icon" className="w-full h-10 hover:bg-sidebar-accent text-sidebar-foreground">
               <MessageSquarePlus className="h-5 w-5" />
             </Button>
           </div>}
 
         {/* Chat History */}
-        <div className="flex-1 overflow-y-auto bg-inherit">
+        <div className="flex-1 overflow-y-auto">
           {state !== "collapsed" ?
         // Full sidebar view
         chatGroups.map(group => <SidebarGroup key={group.date} className="px-3 py-2">
-                <SidebarGroupLabel className="text-xs text-muted-foreground px-0 pb-2">
+                <SidebarGroupLabel className="text-xs text-sidebar-foreground/60 px-0 pb-2">
                   <Calendar className="h-3 w-3 mr-1" />
                   {group.date}
                 </SidebarGroupLabel>
@@ -98,14 +98,14 @@ export function AppSidebar() {
                     {group.chats.map(chat => <SidebarMenuItem key={chat.id}>
                         <SidebarMenuButton onClick={() => handleChatSelect(chat.id)} className={`
                             relative group rounded-lg px-3 py-2 text-left w-full justify-start
-                            ${currentChatId === chat.id ? 'bg-accent text-accent-foreground' : 'hover:bg-accent/50 text-muted-foreground hover:text-foreground'}
+                            ${currentChatId === chat.id ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50 text-sidebar-foreground/80 hover:text-sidebar-foreground'}
                           `}>
                           <MessageSquare className="h-4 w-4 mr-3 flex-shrink-0" />
                           <div className="flex-1 min-w-0">
                             <div className="truncate text-sm font-medium">
                               {chat.title}
                             </div>
-                            <div className="truncate text-xs text-muted-foreground mt-0.5">
+                            <div className="truncate text-xs text-sidebar-foreground/60 mt-0.5">
                               {chat.lastMessage}
                             </div>
                           </div>
@@ -130,7 +130,7 @@ export function AppSidebar() {
               </SidebarGroup>) :
         // Collapsed sidebar view - just show chat icons
         <div className="p-2 space-y-2">
-              {chatHistory.slice(0, 10).map(chat => <Button key={chat.id} onClick={() => handleChatSelect(chat.id)} variant="ghost" size="icon" className={`w-full h-10 ${currentChatId === chat.id ? 'bg-accent text-accent-foreground' : 'hover:bg-accent/50'}`}>
+              {chatHistory.slice(0, 10).map(chat => <Button key={chat.id} onClick={() => handleChatSelect(chat.id)} variant="ghost" size="icon" className={`w-full h-10 text-sidebar-foreground ${currentChatId === chat.id ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
                   <MessageSquare className="h-4 w-4" />
                 </Button>)}
             </div>}
