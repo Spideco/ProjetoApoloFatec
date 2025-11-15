@@ -29,7 +29,7 @@ export const ChatInput = ({ onSendMessage, disabled = false, onNewChat, showNewC
 
   return (
     <div className="chat-input fixed bottom-0 left-0 right-0 p-4 border-t border-border backdrop-blur-sm bg-background/80">
-      <div className="max-w-4xl mx-auto flex gap-3 items-end">
+      <div className="max-w-4xl mx-auto flex gap-3 items-center">
         {showNewChatButton && (
           <Button
             onClick={onNewChat}
