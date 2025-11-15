@@ -64,7 +64,7 @@ export function AppSidebar() {
     return Object.values(groups).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   };
   const chatGroups = formatChatsByDate();
-  return <Sidebar className="w-80 border-r border-sidebar-border" collapsible="icon">
+  return <Sidebar className="w-80 border-r border-sidebar-border z-50" collapsible="icon">
       <SidebarContent className="p-0">
         {/* Header with collapse toggle */}
         <div className="flex items-center justify-between p-3 border-b border-sidebar-border">

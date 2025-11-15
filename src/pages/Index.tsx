@@ -151,8 +151,8 @@ export default function Index() {
       <AppSidebar />
         
         <div className="flex flex-col flex-1">
-        <header className="fixed top-0 left-0 right-0 h-12 flex items-center justify-between px-4 border-b border-border bg-background/80 backdrop-blur-sm z-30">
-          <SidebarTrigger className="md:hidden z-40" />
+        <header className="fixed top-0 left-0 right-0 h-12 flex items-center justify-between px-4 border-b border-border bg-background/80 backdrop-blur-sm z-40">
+          <SidebarTrigger className="md:hidden" />
           <div className="flex-1 flex justify-center">
             <ChatHeader />
           </div>
