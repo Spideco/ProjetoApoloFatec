@@ -8,6 +8,13 @@
       "when": 1792106573973,
       "tag": "0000_apolo_core",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792106588344,
+      "tag": "0001_avatar_select",
+      "breakpoints": true
     }
   ]
 }
