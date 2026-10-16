@@ -5,6 +5,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '@/components/ui/button';
 import { useChatHistory } from '@/hooks/useChatHistory';
 import { useIsMobile } from '@/hooks/use-mobile'; // Importado para verificar o estado mobile
+import { useAuth } from '@/hooks/useAuth';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ProfileDialog } from '@/components/ProfileDialog';
 
 interface ChatGroup {
   date: string;
@@ -28,6 +31,8 @@ export function AppSidebar() {
     state,
     toggleSidebar
   } = useSidebar();
+  const { user, profile, avatarSrc } = useAuth();
+  const [profileOpen, setProfileOpen] = useState(false);
   
   const isMobile = useIsMobile();
   
@@ -146,6 +151,16 @@ export function AppSidebar() {
                 </Button>)}
             </div>}
         </div>
+        <div className="border-t border-sidebar-border p-3">
+          <button onClick={() => setProfileOpen(true)} className="flex w-full items-center gap-3 rounded-lg p-1 hover:bg-sidebar-accent text-sidebar-foreground">
+            <Avatar className="h-8 w-8">
+              {avatarSrc && <AvatarImage src={avatarSrc} />}
+              <AvatarFallback>{(profile?.display_name || user?.email || '?').charAt(0).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            {isFullView && <span className="truncate text-sm font-medium">{profile?.display_name || user?.email}</span>}
+          </button>
+        </div>
       </SidebarContent>
+      <ProfileDialog open={profileOpen} onOpenChange={setProfileOpen} />
     </Sidebar>;
 }
