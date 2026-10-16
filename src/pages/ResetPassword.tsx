@@ -22,7 +22,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="min-h-screen w-full flex items-center justify-center bg-background px-4">
       <form onSubmit={submit} className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 space-y-4">
         <h1 className="text-xl font-semibold text-foreground text-center">Nova senha</h1>
         <div className="space-y-1.5">

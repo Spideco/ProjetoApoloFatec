@@ -54,7 +54,7 @@ export default function Auth() {
   const titles = { login: 'Entrar no Apolo', signup: 'Criar conta', forgot: 'Recuperar senha' };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="min-h-screen w-full flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-sm">
         <div className="flex flex-col items-center mb-6">
           <div className="flex items-center gap-2 mb-2">
