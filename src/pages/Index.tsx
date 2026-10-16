@@ -8,195 +8,89 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
-import { useChatHistory } from '@/hooks/useChatHistory';
-import { GeminiService } from '@/services/geminiService';
+import { useChatHistory, ChatMsg } from '@/hooks/useChatHistory';
+import { sendChatMessage } from '@/services/geminiService';
 import { ScrollToBottomButton } from '@/components/ScrollToBottomButton';
 
-interface Message {
-  id: string;
-  text: string;
-  isUser: boolean;
-  timestamp: Date;
-}
-
 export default function Index() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const { toast } = useToast();
-  
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
-  const [geminiService] = useState<GeminiService>(new GeminiService());
-  const {
-    currentChatId,
-    currentChat,
-    createNewChat,
-    saveCurrentChat,
-    clearCurrentChat,
-  } = useChatHistory();
+  const skipLoadRef = useRef(false);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const { currentChatId, createNewChat, ensureChat, loadMessages, refreshChats } = useChatHistory();
+
+  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 
   const handleScroll = () => {
-    const container = chatContainerRef.current;
-    if (container) {
-      // Check if the user is scrolled up more than 200px from the bottom
-      const scrollPosition = container.scrollHeight - container.scrollTop - container.clientHeight;
-      setShowScrollButton(scrollPosition > 200);
-    }
+    const c = chatContainerRef.current;
+    if (c) setShowScrollButton(c.scrollHeight - c.scrollTop - c.clientHeight > 200);
   };
 
-  // Load selected chat messages
   useEffect(() => {
-    if (currentChat) {
-      setMessages(currentChat.messages);
-    } else {
-      setMessages([]);
-    }
-  }, [currentChat]);
-
-  // Auto-scroll on new message or chat load
-  useEffect(() => {
-    // Scroll to bottom when messages are loaded or updated, ensuring the latest content is visible.
-    scrollToBottom();
-  }, [messages.length, isTyping]);
-  
-  // Attach scroll listener
-  useEffect(() => {
-    const container = chatContainerRef.current;
-    if (container) {
-        container.addEventListener('scroll', handleScroll);
-        // Initial check
-        handleScroll();
-        return () => container.removeEventListener('scroll', handleScroll);
-    }
-  }, [messages]);
-
-
-  // Save messages when they change (debounced)
-  useEffect(() => {
-    if (messages.length > 0 && currentChatId) {
-      const timeoutId = setTimeout(() => {
-        saveCurrentChat(messages);
-      }, 1000);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [messages, currentChatId, saveCurrentChat]);
+    if (skipLoadRef.current) { skipLoadRef.current = false; return; }
+    if (!currentChatId) { setMessages([]); return; }
+    let active = true;
+    loadMessages(currentChatId).then(m => { if (active) setMessages(m); });
+    return () => { active = false; };
+  }, [currentChatId]);
 
   const handleSendMessage = async (message: string) => {
-    // Create new chat if none exists
-    if (!currentChatId) {
-      createNewChat();
-    }
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: message,
-      isUser: true,
-      timestamp: new Date(),
-    };
-
-    setMessages(prev => [...prev, userMessage]);
+    const temp: ChatMsg = { id: `tmp-${Date.now()}`, text: message, isUser: true, timestamp: new Date() };
+    setMessages(prev => [...prev, temp]);
     setIsTyping(true);
-
     try {
-      // Preparar histórico incluindo a mensagem atual
-      const conversationHistory = [...messages, userMessage].map(msg => ({
-        text: msg.text,
-        isUser: msg.isUser
-      }));
-      
-      const aiResponseText = await geminiService.generateResponse(conversationHistory);
-      
-      const aiResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        text: aiResponseText,
-        isUser: false,
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, aiResponse]);
-    } catch (error) {
-      console.error('Erro ao gerar resposta:', error);
-      toast({
-        title: "Erro de Comunicação",
-        description: "Não foi possível obter resposta da IA. Verifique sua chave da API.",
-        variant: "destructive"
-      });
-      
-      // Remove the user message if there was an error
-      setMessages(prev => prev.slice(0, -1));
+      if (!currentChatId) skipLoadRef.current = true;
+      const chatId = await ensureChat(message);
+      const res = await sendChatMessage(chatId, message);
+      setMessages(prev => [...prev, { id: res.id, text: res.reply, isUser: false, timestamp: new Date(res.created_at) }]);
+      refreshChats();
+    } catch (error: any) {
+      console.error(error);
+      toast({ title: 'Erro de Comunicação', description: error?.message ?? 'Tente novamente.', variant: 'destructive' });
+      setMessages(prev => prev.filter(m => m.id !== temp.id));
     } finally {
       setIsTyping(false);
     }
   };
 
   const handleNewChat = () => {
-    const newChatId = createNewChat();
+    createNewChat();
     setMessages([]);
     setIsTyping(false);
-    toast({
-      title: "Nova conversa iniciada",
-      description: "Histórico limpo. Faça sua primeira pergunta!",
-    });
   };
-
 
   return (
     <div className="flex min-h-screen w-full bg-background">
       <AppSidebar />
-        
-        <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1">
         <header className="fixed top-0 left-0 right-0 h-12 flex items-center justify-between px-4 border-b border-border bg-background/80 backdrop-blur-sm z-40">
           <SidebarTrigger className="md:hidden" />
-          <div className="flex-1 flex justify-center">
-            <ChatHeader />
-          </div>
-          <div>
-            <ThemeToggle />
-          </div>
+          <div className="flex-1 flex justify-center"><ChatHeader /></div>
+          <div><ThemeToggle /></div>
         </header>
 
         <main className="flex-1 flex flex-col relative pt-12">
           {messages.length === 0 ? (
             <WelcomeScreen />
           ) : (
-            <div 
-              ref={chatContainerRef} 
-              className="flex-1 px-4 py-6 pb-24 overflow-y-auto"
-              onScroll={handleScroll}
-            >
+            <div ref={chatContainerRef} className="flex-1 px-4 py-6 pb-24 overflow-y-auto" onScroll={handleScroll}>
               <div className="max-w-4xl mx-auto">
-                {messages.map((message) => (
-                  <ChatMessage
-                    key={message.id}
-                    message={message.text}
-                    isUser={message.isUser}
-                    timestamp={message.timestamp}
-                  />
+                {messages.map(m => (
+                  <ChatMessage key={m.id} message={m.text} isUser={m.isUser} timestamp={m.timestamp} />
                 ))}
                 {isTyping && <TypingIndicator />}
                 <div ref={messagesEndRef} />
               </div>
             </div>
           )}
-          
-          <ScrollToBottomButton 
-            onClick={scrollToBottom} 
-            isVisible={showScrollButton} 
-          />
+          <ScrollToBottomButton onClick={scrollToBottom} isVisible={showScrollButton} />
         </main>
 
-        <ChatInput 
-          onSendMessage={handleSendMessage} 
-          disabled={isTyping}
-          onNewChat={handleNewChat}
-          showNewChatButton={messages.length > 0}
-        />
+        <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} onNewChat={handleNewChat} showNewChatButton={messages.length > 0} />
       </div>
     </div>
   );
