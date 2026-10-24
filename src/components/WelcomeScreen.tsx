@@ -1,44 +1,53 @@
-import { MessageCircle, BookOpen, Target, Brain } from 'lucide-react';
-export const WelcomeScreen = () => {
-  const features = [{
-    icon: <MessageCircle className="h-6 w-6 text-primary" />,
-    title: "Conversação Natural",
-    description: "Faça perguntas em português ou inglês de forma natural"
+import { ReactNode } from 'react';
+import { Calculator, BookOpen, Leaf, Globe, ArrowRight } from 'lucide-react';
+
+interface WelcomeScreenProps {
+  input: ReactNode;
+  onSelectTopic: (prompt: string) => void;
+}
+
+export const WelcomeScreen = ({ input, onSelectTopic }: WelcomeScreenProps) => {
+  const topics = [{
+    icon: Calculator,
+    title: "Matemática",
+    description: "Resolva questões passo a passo",
+    prompt: "Quero estudar Matemática para o ENEM. Me ajude a resolver questões passo a passo."
   }, {
-    icon: <BookOpen className="h-6 w-6 text-primary" />,
-    title: "Todas as Matérias",
-    description: "Matemática, Português, Ciências, História e mais"
+    icon: BookOpen,
+    title: "Linguagens",
+    description: "Interprete textos e pratique redação",
+    prompt: "Quero estudar Linguagens para o ENEM. Me ajude a interpretar textos e praticar redação."
   }, {
-    icon: <Target className="h-6 w-6 text-primary" />,
-    title: "Foco no ENEM",
-    description: "Conteúdo específico e estratégias para o exame"
+    icon: Leaf,
+    title: "Ciências da Natureza",
+    description: "Revise os principais conceitos",
+    prompt: "Quero revisar os principais conceitos de Ciências da Natureza para o ENEM."
   }, {
-    icon: <Brain className="h-6 w-6 text-primary" />,
-    title: "Explicações Claras",
-    description: "Respostas detalhadas e didáticas para seu aprendizado"
+    icon: Globe,
+    title: "Ciências Humanas",
+    description: "Conecte história, geografia e sociedade",
+    prompt: "Quero estudar Ciências Humanas para o ENEM, conectando história, geografia e sociedade."
   }];
-  return <div className="flex-1 flex px-4 py-12">
-      <div className="max-w-4xl mx-auto w-full">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-foreground mb-4 text-left">Bem-vindo(a) ao Apolo</h2>
-          <p className="text-lg text-muted-foreground leading-relaxed text-left">Seu assistente inteligente para estudar e se preparar para o ENEM. Faça perguntas, tire dúvidas e aprenda de forma interativa.</p>
+
+  return <div className="flex-1 flex items-start justify-center px-4 pt-[12vh] md:pt-[18vh] pb-12">
+      <div className="max-w-[912px] w-full lg:-translate-x-[35px]">
+        <div className="text-center mb-8 md:mb-9">
+          <h2 className="text-[32px] md:text-[48px] leading-tight font-bold text-foreground mb-3 md:mb-4 tracking-tight">Olá, vamos estudar?</h2>
+          <p className="text-base md:text-[19px] text-muted-foreground leading-[1.6] max-w-[660px] mx-auto">Seu espaço de preparação para o ENEM. Tire dúvidas, explore matérias e aprenda no seu ritmo.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {features.map((feature, index) => <div key={index} className="bg-card rounded-xl p-6 border border-border hover:border-primary/30 transition-colors duration-200">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10">
-                  {feature.icon}
-                </div>
-                <h3 className="font-semibold text-foreground">{feature.title}</h3>
+        <div className="mb-10 md:mb-11">{input}</div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          {topics.map(({ icon: Icon, title, description, prompt }) => <button key={title} type="button" onClick={() => onSelectTopic(prompt)} className="group flex items-center gap-5 text-left rounded-xl border border-border bg-card/60 px-6 py-5 md:h-[88px] hover:border-primary/50 hover:bg-card transition-colors duration-200">
+              <Icon className="h-8 w-8 shrink-0 text-primary" strokeWidth={1.5} />
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-[15px] text-foreground mb-1">{title}</h3>
+                <p className="text-sm text-muted-foreground truncate">{description}</p>
               </div>
-              <p className="text-sm text-muted-foreground text-left">
-                {feature.description}
-              </p>
-            </div>)}
+              <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" strokeWidth={1.5} />
+            </button>)}
         </div>
-
-        
       </div>
     </div>;
 };

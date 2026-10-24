@@ -6,7 +6,6 @@ import { TypingIndicator } from '@/components/TypingIndicator';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { AppSidebar } from '@/components/AppSidebar';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
 import { useChatHistory, ChatMsg } from '@/hooks/useChatHistory';
 import { sendChatMessage } from '@/services/geminiService';
@@ -65,20 +64,22 @@ export default function Index() {
 
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <AppSidebar />
-      <div className="flex flex-col flex-1">
-        <header className="fixed top-0 left-0 right-0 h-12 flex items-center justify-between px-4 border-b border-border bg-background/80 backdrop-blur-sm z-40">
-          <SidebarTrigger className="md:hidden" />
-          <div className="flex-1 flex justify-center"><ChatHeader /></div>
-          <div><ThemeToggle /></div>
+      <AppSidebar onHome={handleNewChat} />
+      <div className="flex flex-col flex-1 pl-14 md:pl-[70px]">
+        <header className="fixed top-0 left-14 md:left-[70px] right-0 h-16 flex items-center justify-center px-4 md:px-5 bg-background/80 backdrop-blur-sm z-40">
+          <div className="md:-ml-[70px]"><ChatHeader /></div>
+          <div className="absolute right-4 md:right-5"><ThemeToggle /></div>
         </header>
 
-        <main className="flex-1 flex flex-col relative pt-12">
+        <main className="flex-1 flex flex-col relative pt-16">
           {messages.length === 0 ? (
-            <WelcomeScreen />
+            <WelcomeScreen
+              input={<ChatInput variant="hero" onSendMessage={handleSendMessage} disabled={isTyping} onNewChat={handleNewChat} />}
+              onSelectTopic={handleSendMessage}
+            />
           ) : (
-            <div ref={chatContainerRef} className="flex-1 px-4 py-6 pb-24 overflow-y-auto" onScroll={handleScroll}>
-              <div className="max-w-4xl mx-auto">
+            <div ref={chatContainerRef} className="flex-1 px-4 py-6 pb-36 overflow-y-auto" onScroll={handleScroll}>
+              <div className="max-w-[912px] mx-auto">
                 {messages.map(m => (
                   <ChatMessage key={m.id} message={m.text} isUser={m.isUser} timestamp={m.timestamp} />
                 ))}
@@ -90,7 +91,7 @@ export default function Index() {
           <ScrollToBottomButton onClick={scrollToBottom} isVisible={showScrollButton} />
         </main>
 
-        <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} onNewChat={handleNewChat} showNewChatButton={messages.length > 0} />
+        {messages.length > 0 && <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} onNewChat={handleNewChat} />}
       </div>
     </div>
   );
