@@ -17,6 +17,37 @@ CONTINUIDADE: você tem memória desta conversa. Retome de forma orgânica o que
 
 FORMATO: use markdown; tom professoral, mas acessível; termine com uma pergunta ou sugestão de próximo passo.`;
 
+const PREFERRED_MODELS = [
+  "openai/gpt-oss-120b",
+  "llama-3.3-70b-versatile",
+  "meta-llama/llama-4-maverick-17b-128e-instruct",
+  "meta-llama/llama-4-scout-17b-16e-instruct",
+  "openai/gpt-oss-20b",
+  "qwen/qwen3-32b",
+  "llama-3.1-8b-instant",
+];
+let cachedModel: string | null = null;
+
+async function pickModel(apiKey: string): Promise<string | null> {
+  if (cachedModel) return cachedModel;
+  const r = await fetch("https://api.groq.com/openai/v1/models", {
+    headers: { Authorization: `Bearer ${apiKey}` },
+  });
+  if (!r.ok) {
+    console.error("Groq models error", r.status, await r.text());
+    return null;
+  }
+  const ids: string[] = ((await r.json())?.data ?? [])
+    .filter((m: any) => m.active !== false)
+    .map((m: any) => m.id);
+  console.log("Groq models available:", ids.join(", "));
+  cachedModel = PREFERRED_MODELS.find((p) => ids.includes(p))
+    ?? ids.find((id) => !/whisper|tts|guard|playai|orpheus/i.test(id))
+    ?? null;
+  console.log("Using model:", cachedModel);
+  return cachedModel;
+}
+
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
 
@@ -56,11 +87,14 @@ Deno.serve(async (req) => {
     const apiKey = Deno.env.get("GROQ_API_KEY");
     if (!apiKey) return json({ error: "Chave da IA não configurada" }, 500);
 
+    const model = await pickModel(apiKey);
+    if (!model) return json({ error: "Nenhum modelo de IA disponível para esta chave." }, 502);
+
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model,
         messages,
         temperature: 0.7,
         top_p: 0.9,
