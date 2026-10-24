@@ -48,36 +48,31 @@ Deno.serve(async (req) => {
       .order("created_at", { ascending: false }).limit(MEMORY_SIZE);
     const history = (recent ?? []).reverse();
 
-    const contents: { role: string; parts: { text: string }[] }[] = [];
+    const messages: { role: string; content: string }[] = [{ role: "system", content: SYSTEM_PROMPT }];
     for (const m of history) {
-      const role = m.role === "user" ? "user" : "model";
-      const last = contents[contents.length - 1];
-      if (last && last.role === role) last.parts[0].text += `\n\n${m.content}`;
-      else contents.push({ role, parts: [{ text: m.content }] });
+      messages.push({ role: m.role === "user" ? "user" : "assistant", content: m.content });
     }
-    if (contents[0]?.role === "model") contents.shift();
 
-    const apiKey = Deno.env.get("GEMINI_API_KEY");
+    const apiKey = Deno.env.get("GROQ_API_KEY");
     if (!apiKey) return json({ error: "Chave da IA não configurada" }, 500);
 
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents,
-          generationConfig: { temperature: 0.7, topP: 0.9, maxOutputTokens: 4096 },
-        }),
-      },
-    );
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages,
+        temperature: 0.7,
+        top_p: 0.9,
+        max_tokens: 4096,
+      }),
+    });
     if (!res.ok) {
-      console.error("Gemini error", res.status, await res.text());
+      console.error("Groq error", res.status, await res.text());
       return json({ error: res.status === 429 ? "Muitas requisições, tente novamente em instantes." : "Falha ao falar com a IA." }, res.status === 429 ? 429 : 502);
     }
     const data = await res.json();
-    const reply: string = data?.candidates?.[0]?.content?.parts?.map((p: any) => p.text ?? "").join("") ?? "";
+    const reply: string = data?.choices?.[0]?.message?.content ?? "";
     if (!reply) return json({ error: "A IA não retornou resposta." }, 502);
 
     const { data: saved, error: saveErr } = await supabase.from("messages")
