@@ -113,7 +113,16 @@ Deno.serve(async (req) => {
       return json({ error: res.status === 429 ? "Muitas requisições, tente novamente em instantes." : "Falha ao falar com a IA." }, res.status === 429 ? 429 : 502);
     }
     const data = await res.json();
-    const reply: string = data?.choices?.[0]?.message?.content ?? "";
+    const raw: string = data?.choices?.[0]?.message?.content ?? "";
+    // Garantia extra: remove títulos (#), separadores (---) e linhas de tabela.
+    const reply = raw
+      .replace(/<think>[\s\S]*?<\/think>/g, "")
+      .split("\n")
+      .filter((l) => !/^\s*([-*_]\s*){3,}\s*$/.test(l) && !/^\s*\|?\s*:?-{2,}/.test(l))
+      .map((l) => l.replace(/^\s*#{1,6}\s+/, "").replace(/^\s*\|(.*)\|\s*$/, (_, c) => c.split("|").map((s: string) => s.trim()).filter(Boolean).join(" — ")))
+      .join("\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
     if (!reply) return json({ error: "A IA não retornou resposta." }, 502);
 
     const { data: saved, error: saveErr } = await supabase.from("messages")
